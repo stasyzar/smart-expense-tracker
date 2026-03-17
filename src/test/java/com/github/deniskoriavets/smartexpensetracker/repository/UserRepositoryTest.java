@@ -1,6 +1,6 @@
 package com.github.deniskoriavets.smartexpensetracker.repository;
 
-import com.github.deniskoriavets.smartexpensetracker.entity.Role;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.Role;
 import com.github.deniskoriavets.smartexpensetracker.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

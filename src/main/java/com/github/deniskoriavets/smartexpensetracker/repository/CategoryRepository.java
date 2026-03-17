@@ -1,7 +1,7 @@
 package com.github.deniskoriavets.smartexpensetracker.repository;
 
 import com.github.deniskoriavets.smartexpensetracker.entity.Category;
-import com.github.deniskoriavets.smartexpensetracker.entity.CategoryType;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.CategoryType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

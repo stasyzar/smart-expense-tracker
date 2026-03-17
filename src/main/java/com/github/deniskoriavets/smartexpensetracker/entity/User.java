@@ -1,5 +1,6 @@
 package com.github.deniskoriavets.smartexpensetracker.entity;
 
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.jspecify.annotations.Nullable;

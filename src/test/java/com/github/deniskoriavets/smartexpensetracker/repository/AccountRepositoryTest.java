@@ -1,6 +1,9 @@
 package com.github.deniskoriavets.smartexpensetracker.repository;
 
 import com.github.deniskoriavets.smartexpensetracker.entity.*;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.AccountType;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.Currency;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.Role;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

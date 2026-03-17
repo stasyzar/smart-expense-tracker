@@ -1,5 +1,6 @@
 package com.github.deniskoriavets.smartexpensetracker.entity;
 
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.CategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 

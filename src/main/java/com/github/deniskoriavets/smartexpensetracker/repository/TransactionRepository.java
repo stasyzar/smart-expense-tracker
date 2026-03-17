@@ -1,7 +1,7 @@
 package com.github.deniskoriavets.smartexpensetracker.repository;
 
 import com.github.deniskoriavets.smartexpensetracker.entity.Transaction;
-import com.github.deniskoriavets.smartexpensetracker.entity.TransactionType;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,8 +1,8 @@
 package com.github.deniskoriavets.smartexpensetracker.repository;
 
 import com.github.deniskoriavets.smartexpensetracker.entity.Category;
-import com.github.deniskoriavets.smartexpensetracker.entity.CategoryType;
-import com.github.deniskoriavets.smartexpensetracker.entity.Role;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.CategoryType;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.Role;
 import com.github.deniskoriavets.smartexpensetracker.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

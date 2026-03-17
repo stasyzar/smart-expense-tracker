@@ -1,5 +1,7 @@
 package com.github.deniskoriavets.smartexpensetracker.entity;
 
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.AccountType;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
 
