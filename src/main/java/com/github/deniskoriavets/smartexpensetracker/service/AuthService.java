@@ -6,6 +6,7 @@ import com.github.deniskoriavets.smartexpensetracker.dto.auth.RegisterRequest;
 import com.github.deniskoriavets.smartexpensetracker.entity.RefreshToken;
 import com.github.deniskoriavets.smartexpensetracker.entity.User;
 import com.github.deniskoriavets.smartexpensetracker.entity.enums.Role;
+import com.github.deniskoriavets.smartexpensetracker.exception.TokenException;
 import com.github.deniskoriavets.smartexpensetracker.repository.RefreshTokenRepository;
 import com.github.deniskoriavets.smartexpensetracker.repository.UserRepository;
 import com.github.deniskoriavets.smartexpensetracker.security.JwtService;
@@ -92,11 +93,11 @@ public class AuthService {
 
     public AuthenticationResponse refreshToken(String refreshToken) {
         var tokenEntity = refreshTokenRepository.findByToken(refreshToken)
-                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+                .orElseThrow(() -> new TokenException("Refresh token not found"));
 
         if (tokenEntity.isRevoked() || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now())) {
             refreshTokenRepository.delete(tokenEntity);
-            throw new RuntimeException("Refresh token is expired or revoked");
+            throw new TokenException("Refresh token is expired or revoked");
         }
 
         var user = tokenEntity.getUser();

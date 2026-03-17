@@ -40,10 +40,6 @@ public class JwtService {
         return extractAllClaims(token).getSubject();
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails, jwtProperties.getExpiration());
-    }
-
     public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails,
