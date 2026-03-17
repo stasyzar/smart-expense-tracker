@@ -89,4 +89,28 @@ public class AuthService {
     private void revokeAllUserTokens(User user) {
         refreshTokenRepository.deleteByUser(user);
     }
+
+    public AuthenticationResponse refreshToken(String refreshToken) {
+        var tokenEntity = refreshTokenRepository.findByToken(refreshToken)
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+
+        if (tokenEntity.isRevoked() || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now())) {
+            refreshTokenRepository.delete(tokenEntity);
+            throw new RuntimeException("Refresh token is expired or revoked");
+        }
+
+        var user = tokenEntity.getUser();
+        var newAccessToken = jwtService.generateAccessToken(user);
+        var newRefreshToken = jwtService.generateRefreshToken(user);
+
+        refreshTokenRepository.delete(tokenEntity);
+        saveUserRefreshToken(user, newRefreshToken);
+
+        return new AuthenticationResponse(newAccessToken, newRefreshToken);
+    }
+
+    public void logout(String refreshToken) {
+        refreshTokenRepository.findByToken(refreshToken)
+                .ifPresent(refreshTokenRepository::delete);
+    }
 }

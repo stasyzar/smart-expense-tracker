@@ -37,4 +37,17 @@ public class AuthController {
     ) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
+
+    @PostMapping("/refresh")
+    @Operation(summary = "Оновлення Access Token за допомогою Refresh Token")
+    public ResponseEntity<AuthenticationResponse> refresh(@RequestBody String refreshToken) {
+        return ResponseEntity.ok(authService.refreshToken(refreshToken));
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Вихід із системи (анулювання токена)")
+    public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
+        authService.logout(refreshToken);
+        return ResponseEntity.noContent().build();
+    }
 }
