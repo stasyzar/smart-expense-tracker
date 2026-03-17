@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/migrations/003-create-categories-table.xml
   - include:
       file: db/changelog/migrations/004-create-transactions-table.xml
+  - include:
+      file: db/changelog/migrations/005-create-refresh-tokens-table.xml

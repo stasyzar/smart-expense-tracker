@@ -29,25 +29,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization"); // 
+        final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
 
-        // 1. Перевіряємо, чи є заголовок Authorization і чи починається він з Bearer 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 2. Витягуємо токен
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt); // [cite: 157]
+        userEmail = jwtService.extractUsername(jwt);
 
-        // 3. Якщо email є і користувач ще не автентифікований у поточному контексті
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail); // [cite: 158]
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-            // 4. Валідуємо токен [cite: 157]
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -56,7 +52,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 
-                // 5. Оновлюємо SecurityContext 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
