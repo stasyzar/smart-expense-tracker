@@ -30,12 +30,12 @@ public class CategoryService {
         var category = categoryMapper.toEntity(createCategoryDto);
         category.setUser(user);
         categoryRepository.save(category);
-        return categoryMapper.toDto(category);
+        return categoryMapper.toResponseDto(category);
     }
 
     public List<CategoryResponseDto> getAllCategories() {
         var user = getCurrentUser();
-        return categoryRepository.findAllByUserId(user.getId()).stream().map(categoryMapper::toDto).toList();
+        return categoryRepository.findAllByUserId(user.getId()).stream().map(categoryMapper::toResponseDto).toList();
     }
 
     public CategoryResponseDto getCategoryById(UUID id) {
@@ -44,7 +44,7 @@ public class CategoryService {
         if (!category.getUser().getId().equals(user.getId())) {
             throw new EntityNotFoundException();
         }
-        return categoryMapper.toDto(category);
+        return categoryMapper.toResponseDto(category);
     }
 
     public CategoryResponseDto updateCategory(UUID id, UpdateCategoryDto updateCategoryDto) {
@@ -54,7 +54,7 @@ public class CategoryService {
             throw new EntityNotFoundException();
         categoryMapper.updateCategory(category, updateCategoryDto);
         categoryRepository.save(category);
-        return categoryMapper.toDto(category);
+        return categoryMapper.toResponseDto(category);
     }
 
     public void deleteCategory(UUID id) {
