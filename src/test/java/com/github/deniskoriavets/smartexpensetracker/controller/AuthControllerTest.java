@@ -41,7 +41,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Реєстрація: успіх при валідних даних")
+    @DisplayName("Should successfully register and return tokens when request is valid")
     void registerShouldReturnTokensWhenRequestIsValid() throws Exception {
         var request = new RegisterRequest(
                 "test@ukma.edu.ua",
@@ -59,7 +59,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Логін: успіх при правильних облікових даних")
+    @DisplayName("Should login and return tokens when credentials are correct")
     void loginShouldReturnTokensWhenCredentialsAreCorrect() throws Exception {
         var registerRequest = new RegisterRequest("login@test.com", "securePass123", "User", "Test");
         mockMvc.perform(post("/api/auth/register")
@@ -76,7 +76,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Логін: помилка 401/403 при неправильному паролі")
+    @DisplayName("Should return 4xx error on login when password is wrong")
     void loginShouldFailWhenPasswordIsWrong() throws Exception {
         var loginRequest = new LoginRequest("wrong@test.com", "wrongpass1");
 
@@ -87,7 +87,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Безпека: доступ до захищеного ендпоінту без токена має бути заблоковано")
+    @DisplayName("Should return 4xx error when accessing protected endpoint without token")
     void protectedEndpointShouldReturn401WhenNoToken() throws Exception {
         mockMvc.perform(get("/api/auth/refresh"))
                 .andExpect(status().is4xxClientError());
