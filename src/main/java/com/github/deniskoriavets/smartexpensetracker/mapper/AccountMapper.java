@@ -12,8 +12,7 @@ import org.mapstruct.MappingTarget;
 public interface AccountMapper {
     Account toEntity(CreateAccountDto createAccountDto);
 
-    @Mapping(target = "balance", ignore = true)
-    AccountResponseDto toResponseDto(Account account);
+    AccountResponseDto toResponseDto(Account account, long balance);
 
     void updateAccount(@MappingTarget Account account, UpdateAccountDto updateAccountDto);
 }
