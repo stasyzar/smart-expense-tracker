@@ -59,6 +59,7 @@ public class AccountService {
             throw new EntityNotFoundException();
         }
         accountMapper.updateAccount(account, updateAccountDto);
+        accountRepository.save(account);
         return accountMapper.toResponseDto(account, calculateBalance(account.getId()));
     }
 
