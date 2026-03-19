@@ -58,14 +58,14 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
             LocalDateTime endDate
     );
 
-    @Query(value = "SELECT to_char(t.transaction_date, 'YYYY-MM') as period, " +
-            "COALESCE(SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END), 0) as totalIncome, " +
-            "COALESCE(SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END), 0) as totalExpense " +
-            "FROM transactions t JOIN accounts a ON t.account_id = a.id " +
-            "WHERE a.user_id = :userId AND t.transaction_date >= :startDate AND t.transaction_date <= :endDate " +
-            "GROUP BY to_char(t.transaction_date, 'YYYY-MM') " +
-            "ORDER BY period",
-            nativeQuery = true)
+    @Query("SELECT FUNCTION('to_char', t.transactionDate, 'YYYY-MM') as period, " +
+            "COALESCE(SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0L END), 0L) as totalIncome, " +
+            "COALESCE(SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0L END), 0L) as totalExpense " +
+            "FROM Transaction t " +
+            "WHERE t.account.user.id = :userId " +
+            "AND t.transactionDate >= :startDate AND t.transactionDate <= :endDate " +
+            "GROUP BY FUNCTION('to_char', t.transactionDate, 'YYYY-MM') " +
+            "ORDER BY FUNCTION('to_char', t.transactionDate, 'YYYY-MM')")
     List<MonthlySumProjection> findMonthlySumsByUserIdAndDateBetween(
             UUID userId,
             LocalDateTime startDate,
