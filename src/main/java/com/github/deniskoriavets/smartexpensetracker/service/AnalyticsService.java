@@ -1,7 +1,6 @@
 package com.github.deniskoriavets.smartexpensetracker.service;
 
 import com.github.deniskoriavets.smartexpensetracker.dto.analytics.*;
-import com.github.deniskoriavets.smartexpensetracker.entity.Category;
 import com.github.deniskoriavets.smartexpensetracker.entity.User;
 import com.github.deniskoriavets.smartexpensetracker.entity.enums.CategoryType;
 import com.github.deniskoriavets.smartexpensetracker.entity.enums.TransactionType;
