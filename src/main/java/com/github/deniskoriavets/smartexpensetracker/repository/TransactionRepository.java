@@ -6,14 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
-    Page<Transaction> findByAccountId(UUID accountId, Pageable pageable);
-
     @Query("select t from Transaction t where t.account.id = :accountId and t.transactionDate between :startDate and :endDate")
     List<Transaction> findByAccountIdAndTransactionDateBetween(UUID accountId, LocalDateTime startDate, LocalDateTime endDate);
 
@@ -22,4 +21,17 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     @Query("select sum(t.amount) from Transaction t where t.category.id = :categoryId and t.transactionDate between :startDate and :endDate")
     Long sumAmountByCategoryIdAndTransactionDateBetween(UUID categoryId, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("SELECT t FROM Transaction t WHERE t.account.id = :accountId " +
+            "AND (:type IS NULL OR t.type = :type) " +
+            "AND (:categoryId IS NULL OR t.category.id = :categoryId) " +
+            "AND (cast(:fromDate as timestamp) IS NULL OR t.transactionDate >= :fromDate) " +
+            "AND (cast(:toDate as timestamp) IS NULL OR t.transactionDate <= :toDate)")
+    Page<Transaction> findByAccountIdAndFilters(
+            UUID accountId,
+            TransactionType type,
+             UUID categoryId,
+            LocalDateTime fromDate,
+            LocalDateTime toDate,
+            Pageable pageable);
 }

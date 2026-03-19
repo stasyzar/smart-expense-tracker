@@ -143,12 +143,11 @@ public class TransactionServiceTest {
         when(userRepository.findByEmail(testUser.getEmail())).thenReturn(Optional.of(testUser));
         when(accountRepository.findById(testAccount.getId())).thenReturn(Optional.of(testAccount));
 
-        when(transactionRepository.findByAccountId(testAccount.getId(), pageable)).thenReturn(transactionPage);
-
+        when(transactionRepository.findByAccountIdAndFilters(eq(testAccount.getId()), any(), any(), any(), any(), eq(pageable))).thenReturn(transactionPage);
         when(transactionMapper.toDto(any())).thenReturn(expectedDto);
 
         // Act
-        Page<TransactionResponseDto> result = transactionService.getTransactionsByAccountId(testAccount.getId(), pageable);
+        Page<TransactionResponseDto> result = transactionService.getTransactionsByAccountId(testAccount.getId(), null, null, null, null, pageable);
 
         // Assert
         assertNotNull(result);

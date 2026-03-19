@@ -4,6 +4,7 @@ import com.github.deniskoriavets.smartexpensetracker.dto.transaction.CreateTrans
 import com.github.deniskoriavets.smartexpensetracker.dto.transaction.TransactionResponseDto;
 import com.github.deniskoriavets.smartexpensetracker.dto.transaction.UpdateTransactionDto;
 import com.github.deniskoriavets.smartexpensetracker.entity.User;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.TransactionType;
 import com.github.deniskoriavets.smartexpensetracker.mapper.TransactionMapper;
 import com.github.deniskoriavets.smartexpensetracker.repository.AccountRepository;
 import com.github.deniskoriavets.smartexpensetracker.repository.CategoryRepository;
@@ -13,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,14 +51,20 @@ public class TransactionService {
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
-    public Page<TransactionResponseDto> getTransactionsByAccountId(UUID accountId, Pageable pageable) {
-        var user = getCurrentUser();
+    public Page<TransactionResponseDto> getTransactionsByAccountId(
+            UUID accountId,
+            TransactionType type,
+            UUID categoryId,
+            LocalDateTime from,
+            LocalDateTime to,
+            Pageable pageable) {
 
+        var user = getCurrentUser();
         var account = accountRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
         if (!account.getUser().getId().equals(user.getId()))
             throw new EntityNotFoundException();
 
-        return transactionRepository.findByAccountId(accountId, pageable)
+        return transactionRepository.findByAccountIdAndFilters(accountId, type, categoryId, from, to, pageable)
                 .map(transactionMapper::toDto);
     }
 

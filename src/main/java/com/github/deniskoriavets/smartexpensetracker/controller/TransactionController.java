@@ -3,6 +3,7 @@ package com.github.deniskoriavets.smartexpensetracker.controller;
 import com.github.deniskoriavets.smartexpensetracker.dto.transaction.CreateTransactionDto;
 import com.github.deniskoriavets.smartexpensetracker.dto.transaction.TransactionResponseDto;
 import com.github.deniskoriavets.smartexpensetracker.dto.transaction.UpdateTransactionDto;
+import com.github.deniskoriavets.smartexpensetracker.entity.enums.TransactionType;
 import com.github.deniskoriavets.smartexpensetracker.service.TransactionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -10,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,8 +33,16 @@ public class TransactionController {
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<Page<TransactionResponseDto>> getTransactionsByAccountId(@PathVariable UUID accountId, @ParameterObject Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.getTransactionsByAccountId(accountId, pageable));
+    public ResponseEntity<Page<TransactionResponseDto>> getTransactionsByAccountId(
+            @PathVariable UUID accountId,
+            @RequestParam(required = false) TransactionType type,
+            @RequestParam(required = false) UUID categoryId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @ParameterObject Pageable pageable) {
+
+        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(
+                accountId, type, categoryId, from, to, pageable));
     }
 
     @GetMapping("/{id}")
