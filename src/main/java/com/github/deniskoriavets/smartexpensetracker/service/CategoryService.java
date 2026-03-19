@@ -9,6 +9,7 @@ import com.github.deniskoriavets.smartexpensetracker.repository.CategoryReposito
 import com.github.deniskoriavets.smartexpensetracker.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class CategoryService {
     private final UserRepository userRepository;
     private final CategoryMapper categoryMapper;
 
+    @CacheEvict(value = {"analyticsSummary", "categoryAnalytics", "monthlyStats", "budgetStatus"}, allEntries = true)
     public CategoryResponseDto createCategory(CreateCategoryDto createCategoryDto) {
         var user = getCurrentUser();
         var category = categoryMapper.toEntity(createCategoryDto);
@@ -47,6 +49,7 @@ public class CategoryService {
         return categoryMapper.toResponseDto(category);
     }
 
+    @CacheEvict(value = {"analyticsSummary", "categoryAnalytics", "monthlyStats", "budgetStatus"}, allEntries = true)
     public CategoryResponseDto updateCategory(UUID id, UpdateCategoryDto updateCategoryDto) {
         var user = getCurrentUser();
         var category = categoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
@@ -57,6 +60,7 @@ public class CategoryService {
         return categoryMapper.toResponseDto(category);
     }
 
+    @CacheEvict(value = {"analyticsSummary", "categoryAnalytics", "monthlyStats", "budgetStatus"}, allEntries = true)
     public void deleteCategory(UUID id) {
         var user = getCurrentUser();
         var category = categoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
