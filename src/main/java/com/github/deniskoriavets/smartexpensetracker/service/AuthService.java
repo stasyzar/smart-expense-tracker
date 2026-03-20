@@ -14,6 +14,7 @@ import com.github.deniskoriavets.smartexpensetracker.repository.RefreshTokenRepo
 import com.github.deniskoriavets.smartexpensetracker.repository.UserRepository;
 import com.github.deniskoriavets.smartexpensetracker.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +27,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class AuthService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
@@ -61,6 +63,8 @@ public class AuthService {
 
         refreshTokenRepository.save(refreshTokenEntity);
 
+        log.info("New user successfully registered with email: {}", request.email());
+
         return new AuthenticationResponse(accessToken, refreshToken);
     }
 
@@ -80,6 +84,8 @@ public class AuthService {
 
         revokeAllUserTokens(user);
         saveUserRefreshToken(user, refreshToken);
+
+        log.info("User {} successfully authenticated", request.email());
 
         return new AuthenticationResponse(accessToken, refreshToken);
     }
