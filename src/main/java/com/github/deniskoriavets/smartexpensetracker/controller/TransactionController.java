@@ -5,6 +5,7 @@ import com.github.deniskoriavets.smartexpensetracker.dto.transaction.Transaction
 import com.github.deniskoriavets.smartexpensetracker.dto.transaction.UpdateTransactionDto;
 import com.github.deniskoriavets.smartexpensetracker.entity.enums.TransactionType;
 import com.github.deniskoriavets.smartexpensetracker.service.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +29,13 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping
+    @Operation(summary = "Створити транзакцію", description = "Додає нову транзакцію до вказаного рахунку та категорії")
     public ResponseEntity<TransactionResponseDto> createTransaction(@RequestBody @Valid CreateTransactionDto createTransactionDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(createTransactionDto));
     }
 
     @GetMapping("/account/{accountId}")
+    @Operation(summary = "Отримати транзакції рахунку", description = "Повертає пагінований список транзакцій для конкретного рахунку з можливістю фільтрації за часом та типом")
     public ResponseEntity<Page<TransactionResponseDto>> getTransactionsByAccountId(
             @PathVariable UUID accountId,
             @RequestParam(required = false) TransactionType type,
@@ -46,16 +49,19 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Отримати транзакцію за ID", description = "Повертає деталі конкретної транзакції")
     public ResponseEntity<TransactionResponseDto> getTransactionById(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.getTransactionById(id));
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Оновити транзакцію", description = "Змінює суму, опис, категорію або дату існуючої транзакції")
     public ResponseEntity<TransactionResponseDto> updateTransaction(@PathVariable UUID id, @RequestBody @Valid UpdateTransactionDto updateTransactionDto) {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.updateTransaction(id, updateTransactionDto));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Видалити транзакцію", description = "Видаляє транзакцію (баланс рахунку перерахується автоматично)")
     public ResponseEntity<TransactionResponseDto> deleteTransaction(@PathVariable UUID id) {
         transactionService.deleteTransaction(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

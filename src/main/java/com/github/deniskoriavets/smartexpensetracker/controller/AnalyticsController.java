@@ -3,6 +3,7 @@ package com.github.deniskoriavets.smartexpensetracker.controller;
 import com.github.deniskoriavets.smartexpensetracker.dto.analytics.*;
 import com.github.deniskoriavets.smartexpensetracker.entity.enums.TransactionType;
 import com.github.deniskoriavets.smartexpensetracker.service.AnalyticsService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,6 +22,7 @@ public class AnalyticsController {
     private final AnalyticsService analyticsService;
 
     @GetMapping("/summary")
+    @Operation(summary = "Загальна статистика", description = "Повертає суму доходів, витрат та загальний баланс за обраний період дат")
     public ResponseEntity<AnalyticsSummaryDto> getSummary(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
@@ -29,6 +31,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/categories")
+    @Operation(summary = "Статистика за категоріями", description = "Повертає суму та відсоток по кожній категорії (доходи або витрати) за період")
     public ResponseEntity<List<CategoryAnalyticsDto>> getCategoriesAnalytics(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
@@ -37,6 +40,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/monthly")
+    @Operation(summary = "Місячна статистика", description = "Повертає агреговані доходи та витрати згруповані по місяцях")
     public ResponseEntity<List<MonthlyAnalyticsDto>> getMonthlyStats(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
@@ -44,6 +48,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/budgets")
+    @Operation(summary = "Статус бюджетів", description = "Повертає інформацію про ліміти категорій та поточні витрати користувача у поточному місяці")
     public ResponseEntity<List<BudgetStatusDto>> getBudgetStatuses() {
         return ResponseEntity.ok(analyticsService.getBudgetStatus());
     }
