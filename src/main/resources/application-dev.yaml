@@ -13,7 +13,7 @@ spring:
 application:
   security:
     jwt:
-      secret-key: ${JWT_SECRET_KEY}
+      secret-key: 4hiJCj1Sl2OH/8V0U9rArhTvQBNDx+hAPGGI+LReFJY=
       expiration: 900000 # 15 хвилин у мілісекундах (Access Token)
       refresh-token:
         expiration: 604800000 # 7 днів (Refresh Token)
