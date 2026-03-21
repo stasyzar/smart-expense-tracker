@@ -5,6 +5,7 @@ import com.github.deniskoriavets.smartexpensetracker.entity.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class Account {
+public class Account implements Serializable {
     @Id
     @GeneratedValue
     @EqualsAndHashCode.Include

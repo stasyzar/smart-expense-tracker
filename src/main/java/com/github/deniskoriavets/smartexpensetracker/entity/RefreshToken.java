@@ -3,6 +3,7 @@ package com.github.deniskoriavets.smartexpensetracker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class RefreshToken {
+public class RefreshToken implements Serializable {
     @Id
     @GeneratedValue
     @EqualsAndHashCode.Include

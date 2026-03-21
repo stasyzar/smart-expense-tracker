@@ -9,11 +9,13 @@ import com.github.deniskoriavets.smartexpensetracker.entity.User;
 import com.github.deniskoriavets.smartexpensetracker.entity.enums.CategoryType;
 import com.github.deniskoriavets.smartexpensetracker.entity.enums.Role;
 import com.github.deniskoriavets.smartexpensetracker.exception.TokenException;
+import com.github.deniskoriavets.smartexpensetracker.exception.UserAlreadyExistsException;
 import com.github.deniskoriavets.smartexpensetracker.repository.CategoryRepository;
 import com.github.deniskoriavets.smartexpensetracker.repository.RefreshTokenRepository;
 import com.github.deniskoriavets.smartexpensetracker.repository.UserRepository;
 import com.github.deniskoriavets.smartexpensetracker.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class AuthService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
@@ -35,6 +38,10 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.email())) {
+            throw new UserAlreadyExistsException("Користувач з email " + request.email() + " вже існує");
+        }
+
         User user = User.builder()
                 .email(request.email())
                 .firstName(request.firstName())
@@ -61,6 +68,8 @@ public class AuthService {
 
         refreshTokenRepository.save(refreshTokenEntity);
 
+        log.info("New user successfully registered with email: {}", request.email());
+
         return new AuthenticationResponse(accessToken, refreshToken);
     }
 
@@ -80,6 +89,8 @@ public class AuthService {
 
         revokeAllUserTokens(user);
         saveUserRefreshToken(user, refreshToken);
+
+        log.info("User {} successfully authenticated", request.email());
 
         return new AuthenticationResponse(accessToken, refreshToken);
     }

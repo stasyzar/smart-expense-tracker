@@ -179,7 +179,6 @@ class AnalyticsControllerTest {
     @Test
     @DisplayName("Should return 200 OK and budget statuses")
     void getBudgetStatusesShouldReturn200AndList() throws Exception {
-        // Тут параметри from та to не передаємо, бо ми їх прибрали з контролера
         mockMvc.perform(get("/api/analytics/budgets")
                         .header("Authorization", "Bearer " + jwtToken)
                         .contentType(MediaType.APPLICATION_JSON))
