@@ -5,7 +5,6 @@ import com.github.deniskoriavets.smartexpensetracker.dto.account.CreateAccountDt
 import com.github.deniskoriavets.smartexpensetracker.dto.account.UpdateAccountDto;
 import com.github.deniskoriavets.smartexpensetracker.entity.Account;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")

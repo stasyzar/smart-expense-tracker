@@ -4,6 +4,7 @@ import com.github.deniskoriavets.smartexpensetracker.entity.enums.CategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class Category {
+public class Category implements Serializable {
     @Id
     @GeneratedValue
     @EqualsAndHashCode.Include
