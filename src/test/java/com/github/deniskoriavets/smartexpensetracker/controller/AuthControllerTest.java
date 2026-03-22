@@ -89,7 +89,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should return 4xx error when accessing protected endpoint without token")
     void protectedEndpointShouldReturn401WhenNoToken() throws Exception {
-        mockMvc.perform(get("/api/auth/refresh"))
+        mockMvc.perform(get("/api/accounts"))
                 .andExpect(status().is4xxClientError());
     }
 }
