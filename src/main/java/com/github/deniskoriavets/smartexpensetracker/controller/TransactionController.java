@@ -35,14 +35,13 @@ public class TransactionController {
     }
 
     @GetMapping
-    @Operation(summary = "Отримати всі транзакції", description = "Повертає список всіх транзакцій для дашборду")
+    @Operation(summary = "Отримати всі транзакції", description = "Повертає список всіх транзакцій поточного користувача для дашборду")
     public ResponseEntity<List<TransactionResponseDto>> getAllTransactions() {
-        List<TransactionResponseDto> transactions = transactionService.getAllTransactions();
-        return ResponseEntity.ok(transactions);
+        return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
     @GetMapping("/account/{accountId}")
-    @Operation(summary = "Отримати транзакції рахунку", description = "Повертає пагінований список транзакцій для конкретного рахунку з можливістю фільтрації за часом та типом")
+    @Operation(summary = "Отримати транзакції рахунку", description = "Повертає пагінований список транзакцій для конкретного рахунку")
     public ResponseEntity<Page<TransactionResponseDto>> getTransactionsByAccountId(
             @PathVariable UUID accountId,
             @RequestParam(required = false) TransactionType type,
@@ -68,8 +67,8 @@ public class TransactionController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Видалити транзакцію", description = "Видаляє транзакцію (баланс рахунку перерахується автоматично)")
-    public ResponseEntity<TransactionResponseDto> deleteTransaction(@PathVariable UUID id) {
+    @Operation(summary = "Видалити транзакцію", description = "Видаляє транзакцію")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable UUID id) {
         transactionService.deleteTransaction(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

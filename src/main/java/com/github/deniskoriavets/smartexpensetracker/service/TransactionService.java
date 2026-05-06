@@ -53,6 +53,16 @@ public class TransactionService {
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
+    public List<TransactionResponseDto> getAllTransactions() {
+        var user = getCurrentUser();
+        // Отримуємо всі транзакції та фільтруємо ті, що належать рахункам поточного користувача
+        return transactionRepository.findAll().stream()
+                .filter(t -> t.getAccount().getUser().getId().equals(user.getId()))
+                .sorted((t1, t2) -> t2.getCreatedAt().compareTo(t1.getCreatedAt())) // Сортування: нові зверху
+                .map(transactionMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public Page<TransactionResponseDto> getTransactionsByAccountId(
             UUID accountId,
             TransactionType type,
@@ -107,17 +117,6 @@ public class TransactionService {
         if(!transaction.getAccount().getUser().getId().equals(user.getId()))
             throw new EntityNotFoundException();
         transactionRepository.delete(transaction);
-    }
-
-    // НОВИЙ МЕТОД ДЛЯ ДАШБОРДУ
-    public List<TransactionResponseDto> getAllTransactions() {
-        var user = getCurrentUser();
-        
-        return transactionRepository.findAll().stream()
-                .filter(t -> t.getAccount().getUser().getId().equals(user.getId()))
-                .sorted((t1, t2) -> t2.getCreatedAt().compareTo(t1.getCreatedAt()))
-                .map(transactionMapper::toDto)
-                .collect(Collectors.toList());
     }
 
     private User getCurrentUser() {
