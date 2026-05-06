@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,6 +32,13 @@ public class TransactionController {
     @Operation(summary = "Створити транзакцію", description = "Додає нову транзакцію до вказаного рахунку та категорії")
     public ResponseEntity<TransactionResponseDto> createTransaction(@RequestBody @Valid CreateTransactionDto createTransactionDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(createTransactionDto));
+    }
+
+    @GetMapping
+    @Operation(summary = "Отримати всі транзакції", description = "Повертає список всіх транзакцій для дашборду")
+    public ResponseEntity<List<TransactionResponseDto>> getAllTransactions() {
+        List<TransactionResponseDto> transactions = transactionService.getAllTransactions();
+        return ResponseEntity.ok(transactions);
     }
 
     @GetMapping("/account/{accountId}")

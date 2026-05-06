@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -105,6 +107,17 @@ public class TransactionService {
         if(!transaction.getAccount().getUser().getId().equals(user.getId()))
             throw new EntityNotFoundException();
         transactionRepository.delete(transaction);
+    }
+
+    // НОВИЙ МЕТОД ДЛЯ ДАШБОРДУ
+    public List<TransactionResponseDto> getAllTransactions() {
+        var user = getCurrentUser();
+        
+        return transactionRepository.findAll().stream()
+                .filter(t -> t.getAccount().getUser().getId().equals(user.getId()))
+                .sorted((t1, t2) -> t2.getCreatedAt().compareTo(t1.getCreatedAt()))
+                .map(transactionMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     private User getCurrentUser() {
